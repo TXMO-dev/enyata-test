@@ -113,10 +113,27 @@
                 "consumes": ["application/json"],
                 "parameters": [
                     {
-                        "client_id": "string",
-                        "incident_desc": "string",
-                        "city": "string",
-                        "country": "string"
+                        "in": "body",
+                        "name": "body",
+                        "description": "client request object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "client_id":{
+                                    "type": "number"
+                                },
+                                "incident_desc":{
+                                    "type":"string"
+                                },
+                                "city":{
+                                    "type":"string"
+                                },
+                                "country":{
+                                    "type":"string"
+                                }   
+                            }
+                        }
                     }
                 ],  
                 "responses": {
