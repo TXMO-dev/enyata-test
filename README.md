@@ -7,7 +7,7 @@
 
 ```sh
 1. To start Postgres and Node.Js Application - docker-compose up
-2. You will need to Create database by first:
+2. You will need to Create database after step 1:
     - docker-compose exec db psql -U postgres
       - CREATE DATABASE testdb;
 3. In order to access local url for api documentation: http://localhost:8081/api-docs
