@@ -1,0 +1,307 @@
+
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Enyata Incident Report System",
+        "version": "1.0.0",
+        "title": "Incident Report System API",
+        "contact": {
+            "email": "asigbeytimothy@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "schemes": ["https"],
+    "host": "https://testapi.goldentintona.com",
+    "basePath": "/api",
+    "paths" : {
+        "/report/list-reports" : {
+            "get" : {
+                "summary" : "Get all incident reports",
+                "description": "This show cases the list of report incidents",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "the reports have been retreived successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ReportResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The reports were not retreived successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/client/create-client" : {
+            "post" : {
+                "summary" : "Client Creation",
+                "description": "This is responsible for creating the client",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "client request object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name":{
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The client has been created successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties":{
+                                        "id":{
+                                            "type":"integer"
+                                        },
+                                        "name":{
+                                            "type":"string"
+                                        },
+                                        "updatedAt":{
+                                            "type":"string"
+                                        },
+                                        "createdAt":{
+                                            "type":"string"  
+                                        }  
+                                    }
+                                }
+                            }
+                        }  
+                    },
+                    "400": {
+                        "description": "The client has not been created successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/report/create-report" : {
+            "post" : {
+                "summary" : "Create Report",
+                "description": "This creates the report for the respective client (weather report is added based on country and city added.)",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "client request object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "client_id":{
+                                    "type": "number"
+                                },
+                                "incident_desc":{
+                                    "type":"string"
+                                },
+                                "city":{
+                                    "type":"string"
+                                },
+                                "country":{
+                                    "type":"string"
+                                }   
+                            }
+                        }
+                    }
+                ],  
+                "responses": {
+                    "200": {
+                        "description": "The report was created successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success":{
+                                    "type":"boolean"
+                                },
+                                "message":{
+                                    "type":"string"
+                                },
+                                "data":{
+                                    "type":"object",
+                                    "properties":{
+                                        "id":{
+                                            "type":"integer"
+                                        },
+                                        "incident_desc":{
+                                            "type":"string"
+                                        },
+                                        "city":{
+                                            "type":"string"
+                                        },
+                                        "country":{
+                                            "type":"string"
+                                        },
+                                        "date":{
+                                            "type":"string"
+                                        },
+                                        "client":{
+                                            "type":"object",
+                                            "properties":{
+                                                "id":{
+                                                    "type":"number"
+                                                },
+                                                "name":{
+                                                    "type":"string"
+                                                }
+                                            }
+                                        },
+                                        "weather_report":{
+                                            "type":"object",
+                                            "properties":{
+                                                "id":{
+                                                    "type":"number"
+                                                },
+                                                "type":{
+                                                    "type":"string"
+                                                },
+                                                "days":{
+                                                    "type":"string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The report could not be created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        }
+    }, 
+    "definitions": {
+        "ReportResponse": {
+            "type": "object",
+            "properties": {
+                "success":{
+                    "type":"boolean"
+                },
+                "message":{
+                    "type":"string"
+                },
+                "data":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"integer"
+                        },
+                        "incident_desc":{
+                            "type":"string"
+                        },
+                        "city":{
+                            "type":"string"
+                        },
+                        "country":{
+                            "type":"string"
+                        },
+                        "date":{
+                            "type":"string"
+                        },
+                        "client":{
+                            "type":"object",
+                            "properties":{
+                                "id":{
+                                    "type":"number"
+                                },
+                                "name":{
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "weather_report":{
+                            "type":"object",
+                            "properties":{
+                                "id":{
+                                    "type":"number"
+                                },
+                                "type":{
+                                    "type":"string"
+                                },
+                                "days":{
+                                    "type":"string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "ClientResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object",
+                    "properties":{
+                        "id":{
+                            "type":"integer"
+                        },
+                        "name":{
+                            "type":"string"
+                        },
+                        "updatedAt":{
+                            "type":"string"
+                        },
+                        "createdAt":{
+                            "type":"string"  
+                        }  
+                    }
+                }
+            }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+
+        }
+    }
+}

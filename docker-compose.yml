@@ -20,4 +20,4 @@ services:
       - .dbdata:/var/lib/postgresql/data  
 volumes:
   db:
-    driver: local  
+    driver: local      

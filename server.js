@@ -18,29 +18,32 @@ const db = require("./models");
 //     optionSuccessStatus:200
 //   }
 // } else {
-  const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-  } 
+  // let corsOptions
+  // if(process.env.NODE_ENV !== 'Development'){
+  //   corsOptions ={
+  //     origin:'https://testapi.goldentintona.com', 
+  //     credentials:true,            //access-control-allow-credentials:true
+  //     optionSuccessStatus:200
+  //   } 
+  // }
 
-//   const whitelist = ['http://localhost:3000', 'http://localhost:8080', 'https://gti-backend.herokuapp.com']
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     console.log("** Origin of request " + origin)
-//     if (whitelist.indexOf(origin) !== -1 || !origin) {
-//       console.log("Origin acceptable")
-//       callback(null, true)
-//     } else {
-//       console.log("Origin rejected")
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
+  const whitelist = ['https://testapi.goldentintona.com', 'http://localhost:8080', 'http://localhost:8081']
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log("** Origin of request " + origin)
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      console.log("Origin acceptable")
+      callback(null, true)
+    } else {
+      console.log("Origin rejected")
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 const swaggerUi = require('swagger-ui-express');
 
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require(`${process.env.NODE_ENV === 'Development' ? './swagger-dev.json':'./swagger-prod.json'}`);
 const customCss = fs.readFileSync((process.cwd()+"/swagger.css"), 'utf8');
 // let express to use this
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {customCss})); 
@@ -76,15 +79,15 @@ const block_trace = (req, res, next) => {
   app.use(express.json());
   // parse requests of content-type - application/x-www-form-urlencoded
   app.use(express.urlencoded({ extended: true }));
-  if(process.env.NODE_ENV==='Development'){
-    db.sequelize.sync({ force: true }).then(() => {
-      console.log("Drop and re-sync db.");
-    })
-    // db.sequelize.sync()
-      .catch((err) => {  
-          console.log("Failed to sync db: " + err.message);
-      }); 
-  } else {
+  // if(process.env.NODE_ENV==='Development'){
+  //   db.sequelize.sync({ force: true }).then(() => {
+  //     console.log("Drop and re-sync db.");
+  //   })
+  //   // db.sequelize.sync()
+  //     .catch((err) => {  
+  //         console.log("Failed to sync db: " + err.message);
+  //     }); 
+  // } else {
     db.sequelize.sync().then(() => {
       console.log("Synced DB");
     })
@@ -92,7 +95,7 @@ const block_trace = (req, res, next) => {
       .catch((err) => {  
           console.log("Failed to sync db: " + err.message);
       }); 
-  }
+  // }
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to GTI application." });  
   });
